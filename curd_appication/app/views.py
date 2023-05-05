@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http.response import HttpResponse
-from django.contrib.auth.hashers import make_password,check_password
+from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from django.contrib import messages
 
@@ -20,21 +20,43 @@ def welcome(request):
 
 def data(request):
     tabble_obj = User.objects.all()
-    return render(request,'table.html',{'table_obj':tabble_obj})
+    return render(request, "table.html", {"table_obj": tabble_obj})
+
+
+def deletedata(request):
+    id = request.GET["id"]
+    User.objects.get(id=id).delete()
+    return redirect("/data/")
+
+
+def update(request, uid):
+    user = User.objects.get(id=uid)
+    return render(request, "update.html", {"user": user})
+
+
+def update_data(request):
+    if request.method == "POST":
+        uid = request.POST["uid"]
+        name = request.POST["name"]
+        email = request.POST["email"]
+        User.objects.filter(id=uid).update(name=name, email=email)
+        return redirect("/data/")
+
 
 def user_login(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        user_password=request.POST['password']
-        if User.objects.filter(email = email).exists():
-            obj = User.objects.get(email = email)
+    if request.method == "POST":
+        email = request.POST["email"]
+        user_password = request.POST["password"]
+        if User.objects.filter(email=email).exists():
+            obj = User.objects.get(email=email)
             password = obj.password
-            if check_password(user_password,password):
-                return redirect('/data/')
+            if check_password(user_password, password):
+                return redirect("/data/")
             else:
-                return HttpResponse('password incorrect')
+                return HttpResponse("password incorrect")
     else:
-        return HttpResponse('Email is not rajister')
+        return HttpResponse("Email is not rajister")
+
 
 def rajistration(request):
     if request.method == "POST":

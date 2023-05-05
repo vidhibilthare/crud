@@ -24,18 +24,31 @@ tr:nth-child(even) {
 <h2>HTML Table</h2>
 
 <table>
-    {% for i in table_obj %}
+   
   <tr>
+    <th>Id</th>
     <th>Name</th>
     <th>Email</th>
+    <th></th>
+    <th></th>
+    
   </tr>
+  {% for i in table_obj %}
   <tr>
+    <td>{{i.id}}</td>
     <td>{{i.name}}</td>
     <td>{{i.email}}</td>
+    <td>
+      <a href="/update/{{i.id}}">Update</a>
+    </td>
+    <td>
+      <a href="/deletedata/?id={{i.id}}">Delete</a>
+    </td>
+    
   </tr>
- 
+  {% endfor %}
 </table>
-{% endfor %}
+
 </body>
 </html>
 
